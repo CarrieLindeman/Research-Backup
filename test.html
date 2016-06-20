@@ -1,0 +1,71 @@
+<html>
+<head>
+    
+    <link rel="stylesheet" type="text/css" href="style.css">
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {packages:["gauge","orgchart","treemap"]});
+        var masterData = [];
+
+        function parseMasterData(arr){
+            for(var i = 0; i < arr.length; i++){
+                var tempObj = {
+                    ID:arr[i].ID,
+                    name:arr[i].name,
+                    scoreList:arr[i].scoreList
+                };
+                masterData.push(tempObj);
+            }
+        }
+    </script>
+    
+    <script type="text/javascript" src="masterData.js"></script>
+    <script type="text/javascript" src="masterDataParser.js"></script>
+    
+</head>
+<body>
+    <div id="header">
+        <h1>Student Progress Review</h1>
+    </div>
+    
+    <div id = "menu">    
+        </div>
+
+    <div id="section">
+    <div id="title"></div>
+    <div id="filter_div"></div>
+    <div id="chart_div" ></div><!--style="width: 900px; height: 500px;"-->
+    
+    <div id="gauge_title"><h3></h3></div>
+    <div id="gauge_div" style="text-align: center;"></div>
+    </div>
+    
+    <div id="footer">
+        Created for student and professor use.
+    </div>
+    
+    <script>
+        var inputText = "";
+        for(var i = 0; i < masterData.length; i++){
+            inputText+="<button class='accordion'>"+masterData[i].name+"</button><div class='panel'><p><button onclick='osm("+i+")'>Domain Progress</button><button onclick='prereq("+i+")'>Prereq Progress</button></p></div>";
+        }
+        document.getElementById("menu").innerHTML = inputText;
+    </script>
+    
+    <script type="text/javascript" src="osm.js"></script>
+    <script type="text/javascript" src="prereq.js"></script>
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].onclick = function(){
+                this.classList.toggle("active");
+                this.nextElementSibling.classList.toggle("show");
+          }
+        }
+    </script>    
+    
+</body>
+</html>
