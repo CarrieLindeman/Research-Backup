@@ -46,6 +46,9 @@ public class MakeTree {
             newName = makeName(tempList.get(tempList.size()-1));
         } catch( NullPointerException e){
             newName = makeName(topicIn);
+            //ArrayList<String> tempArr = new ArrayList<String>();
+            //tempArr.add(newName);
+            //multCopies.put(topicIn,tempArr);
         }
         return newName;
     }
@@ -65,6 +68,12 @@ public class MakeTree {
         return false;
     }
 
+    /***
+     * checks whether a node is in the multCopies HashMap
+     * @param multCopies array to check
+     * @param topic node name to check
+     * @return boolean
+     */
     public static boolean isInMultCopies(HashMap<String,ArrayList<String>> multCopies, String topic) {
         Set set = multCopies.entrySet();
         Iterator iterator = set.iterator();
@@ -77,6 +86,12 @@ public class MakeTree {
         return false;
     }
 
+    /***
+     * finds the index at which the node appears
+     * @param nodeArr the node array to search
+     * @param topic the node name you are searching for
+     * @return int index at which the node appears
+     */
     public static int getNodeIndex(ArrayList<Node> nodeArr, String topic){
         for (int i = 0; i < nodeArr.size(); i++) {
             if(topic.equals(nodeArr.get(i).getName())){
@@ -86,54 +101,99 @@ public class MakeTree {
         return -1;
     }
 
+    /***
+     * adds a node name to the correct entry in multCopies or makes a new entry if it doesn't already exist
+     * @param multCopiesIn
+     * @param key key to add to
+     * @param toAdd item to add
+     * @return returns updated multCopies Array
+     */
+    public static HashMap<String, ArrayList<String>> addToMultCopies(HashMap<String, ArrayList<String>> multCopiesIn, String key, String toAdd){
+        try{
+            ArrayList<String> temp = multCopiesIn.get(key);
+            temp.add(toAdd);
+            multCopiesIn.put(key,temp);
+        } catch (NullPointerException e){
+            ArrayList<String> temp = new ArrayList<String>();
+            temp.add(toAdd);
+            multCopiesIn.put(key,temp);
+        }
+        return multCopiesIn;
+    }
+
+    /***
+     * makes a new node with new name based on input
+     * @param outNodes
+     * @param cName
+     * @param multCop
+     * @return new node with new name
+     */
+    public static Node makeNewNode(ArrayList<Node> outNodes, String cName, HashMap<String, ArrayList<String>> multCop){
+        int indx = getNodeIndex(outNodes,cName);
+        Node newChild = outNodes.get(indx).makeCopy();
+        newChild.changeName(getNextName(multCop,cName));
+        return newChild;
+    }
+
+    public static ArrayList<Link> addLink(ArrayList<Link> outLinks, String cName, String pName, String replace){
+        if(replace == null) {
+            outLinks.add(new Link(cName, pName));
+        }else {
+            outLinks.add(new Link(replace, pName));
+        }
+        return outLinks;
+    }
+
     public static void run(ArrayList<Node> inputNodes, ArrayList<Link> inputLinks, HashMap<String,ArrayList<String>> multCopies) {
+        //initializes empty outputNodes and outputLinks
         ArrayList<Node> outputNodes = new ArrayList<Node>();
         ArrayList<Link> outputLinks = new ArrayList<Link>();
 
+        //iterates through every input link
         for (int i = 0; i < inputLinks.size(); i++) {
+            //declares the initial child name and parent name
             String childName = inputLinks.get(i).getChild();
             String parentName = inputLinks.get(i).getParent();
+            //sets this value to null and only changes if the child node gets replaced with a copy and a new name
+            String replacementName = null;
+            //if the child is already in outputnodes
             if(isInOutputNodes(outputNodes, childName)){
-                int indx = getNodeIndex(outputNodes, childName);
-                Node newChild = outputNodes.get(indx).makeCopy();
-                newChild.changeName(getNextName(multCopies, childName));
+                Node newChild = makeNewNode(outputNodes,childName,multCopies);
                 outputNodes.add(newChild);
-                if(!isInMultCopies(multCopies, childName)){
-                    ArrayList<String> temp = new ArrayList<String>();
-                    temp.add(newChild.getName());
-                    multCopies.put(childName,temp);
-                }else{
-                    multCopies.get(childName).add(newChild.getName());
-                }
+                replacementName = newChild.getName();
+                //adds the new child to multCopies
+                multCopies = addToMultCopies(multCopies,childName,newChild.getName());
             }
 
+            //if the parent is not already in ouputNodes
             if(!isInOutputNodes(outputNodes, parentName)){
-                int indx = getNodeIndex(inputNodes, parentName);
-                outputNodes.add(inputNodes.get(indx));
+                outputNodes.add(inputNodes.get(getNodeIndex(inputNodes, parentName)));
             }
 
+            //if the child is not already in outputNodes
             if(!isInOutputNodes(outputNodes, childName)) {
-                int indx = getNodeIndex(inputNodes, childName);
-                outputNodes.add(inputNodes.get(indx));
+                outputNodes.add(inputNodes.get(getNodeIndex(inputNodes, childName)));
             }
 
-            if(!isInMultCopies(multCopies, parentName)){
-                outputLinks.add(inputLinks.get(i));
-            }else{
-                outputLinks.add(inputLinks.get(i));
-                ArrayList<String> tempMultCopies = multCopies.get(parentName);
-                ArrayList<String> tempNodeNames = new ArrayList<String>();
-                for (int j = 0; j < tempMultCopies.size(); j++) {
-                    int tempIndx = getNodeIndex(outputNodes, childName);
-                    Node newChild = outputNodes.get(tempIndx).makeCopy();
-                    newChild.changeName(getNextName(multCopies, childName));
+            //adds link to outputLinks
+            outputLinks = addLink(outputLinks, childName, parentName, replacementName);
 
+            //if the parent has multiple copies
+            if(isInMultCopies(multCopies, parentName)){
+                //assign the value to the parent name key to a temp array
+                ArrayList<String> tempParentMultCopies = multCopies.get(parentName);
+
+                for (int j = 0; j < tempParentMultCopies.size(); j++) {
+                    //make a new node to be attached to this parent copy
+                    Node newChild = makeNewNode(outputNodes,childName,multCopies);
+                    //add this node to output nodes
                     outputNodes.add(newChild);
-                    Link tempLink = new Link(newChild.getName(), tempMultCopies.get(j));
-                    outputLinks.add(tempLink);
-                    tempNodeNames.add(newChild.getName());
+                    //add a link between the parent copy and the new node to output links
+                    outputLinks = addLink(outputLinks,newChild.getName(),tempParentMultCopies.get(j),null);
+                    //add the newChild name to mult copies
+                    multCopies = addToMultCopies(multCopies, childName, newChild.getName());
+
                 }
-                multCopies.put(childName,tempNodeNames);
             }
         }
 
@@ -155,11 +215,13 @@ public class MakeTree {
         ArrayList<Link> inputLinks = new ArrayList<Link>();
         inputLinks.add(new Link("B","A"));
         inputLinks.add(new Link("C","A"));
+        inputLinks.add(new Link("D","A"));
         inputLinks.add(new Link("D","B"));
         inputLinks.add(new Link("D","C"));
+        inputLinks.add(new Link("E","C"));
         inputLinks.add(new Link("E","D"));
+        inputLinks.add(new Link("F","D"));
         inputLinks.add(new Link("F","E"));
-        inputLinks.add(new Link("F","C"));
 
         HashMap<String, ArrayList<String>> multCopies = new HashMap<String, ArrayList<String>>();
         //ArrayList<String> tempMultCopiesValue = new ArrayList<String>();
@@ -171,6 +233,6 @@ public class MakeTree {
 
         //System.out.println(getNextName(multCopies, "A"));
         //System.out.println(isInOutputNodes(inputNodes,"e"));
-        //System.out.println(isInMultCopies(multCopies,"A"));
+        //System.out.println(isInMultCopies(multCopies,"E"));
     }
 }

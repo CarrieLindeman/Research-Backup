@@ -27,7 +27,7 @@ public class Link {
     }
 
     public String toString(){
-        return "Link [child: "+this.child+", parent: "+this.parent+"]";
+        return "Link [child: "+this.child+", parent: "+this.parent+"]\n";
     }
     public static void main(String[] args) {
         Link myLink = new Link("A","B");
