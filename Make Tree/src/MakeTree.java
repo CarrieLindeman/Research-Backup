@@ -5,6 +5,22 @@ import java.util.*;
  * Created by carriellindeman on 6/23/2016.
  */
 public class MakeTree {
+
+    ArrayList<Node> myOutputNodes;
+    ArrayList<Link> myOutputLinks;
+
+    public MakeTree(ArrayList<Node> nodesIn, ArrayList<Link> linksIn){
+        HashMap<String, ArrayList<String>> copiesIn = new HashMap<String, ArrayList<String>>();
+        run(nodesIn,linksIn,copiesIn);
+    }
+
+    public ArrayList<Node> getOutputNodes(){
+        return myOutputNodes;
+    }
+
+    public ArrayList<Link> getOutputLinks(){
+        return myOutputLinks;
+    }
     /***
      * takes the previous node name and creates the next node name
      * @param prevName String
@@ -144,7 +160,7 @@ public class MakeTree {
         return outLinks;
     }
 
-    public static void run(ArrayList<Node> inputNodes, ArrayList<Link> inputLinks, HashMap<String,ArrayList<String>> multCopies) {
+    public void run(ArrayList<Node> inputNodes, ArrayList<Link> inputLinks, HashMap<String,ArrayList<String>> multCopies) {
         //initializes empty outputNodes and outputLinks
         ArrayList<Node> outputNodes = new ArrayList<Node>();
         ArrayList<Link> outputLinks = new ArrayList<Link>();
@@ -196,11 +212,8 @@ public class MakeTree {
                 }
             }
         }
-
-        System.out.println(outputLinks);
-        System.out.println(outputNodes);
-        System.out.println(multCopies);
-
+        this.myOutputNodes = outputNodes;
+        this.myOutputLinks = outputLinks;
     }
 
     public static void main(String[] args) {
@@ -211,17 +224,20 @@ public class MakeTree {
         inputNodes.add(new Node("D",9));
         inputNodes.add(new Node("E",11));
         inputNodes.add(new Node("F",13));
+        inputNodes.add(new Node("G",15));
 
         ArrayList<Link> inputLinks = new ArrayList<Link>();
         inputLinks.add(new Link("B","A"));
         inputLinks.add(new Link("C","A"));
-        inputLinks.add(new Link("D","A"));
         inputLinks.add(new Link("D","B"));
+        inputLinks.add(new Link("E","B"));
         inputLinks.add(new Link("D","C"));
-        inputLinks.add(new Link("E","C"));
+        inputLinks.add(new Link("F","C"));
         inputLinks.add(new Link("E","D"));
         inputLinks.add(new Link("F","D"));
         inputLinks.add(new Link("F","E"));
+        inputLinks.add(new Link("G","E"));
+        inputLinks.add(new Link("G","F"));
 
         HashMap<String, ArrayList<String>> multCopies = new HashMap<String, ArrayList<String>>();
         //ArrayList<String> tempMultCopiesValue = new ArrayList<String>();
@@ -229,7 +245,7 @@ public class MakeTree {
         //tempMultCopiesValue.add("A2");
         //multCopies.put("A",tempMultCopiesValue);
 
-        run(inputNodes, inputLinks, multCopies);
+        //run(inputNodes, inputLinks, multCopies);
 
         //System.out.println(getNextName(multCopies, "A"));
         //System.out.println(isInOutputNodes(inputNodes,"e"));

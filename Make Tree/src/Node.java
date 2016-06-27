@@ -5,10 +5,12 @@ public class Node {
 
     String name;
     double value;
+    double prevalue;
 
     public Node(String nameIn, double valueIn) {
         name = nameIn;
         value = valueIn;
+        prevalue = valueIn;
     }
 
     public String getName() {
@@ -26,12 +28,14 @@ public class Node {
         this.value = valueIn;
     }
 
+    public void changePrevalue(double valueIn) { this.prevalue = valueIn;}
+
     public Node makeCopy(){
         return new Node(this.name, this.value);
     }
 
     public String toString(){
-        return "Node [name: "+this.name+", value: "+this.value+"]";
+        return "Node [name: "+this.name+", value: "+this.value+"]";//", preValue: "+this.prevalue+"]";
     }
 
     public static void main(String[] args) {
@@ -41,6 +45,7 @@ public class Node {
         myNode.changeValue(85);
         System.out.println(myNode);
         Node mySecondNode = myNode.makeCopy();
+        mySecondNode.changePrevalue(15);
         mySecondNode.changeName("test");
         System.out.println(mySecondNode);
     }
