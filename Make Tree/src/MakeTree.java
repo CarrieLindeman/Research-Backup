@@ -182,7 +182,7 @@ public class MakeTree {
             }
 
             //if the parent is not already in ouputNodes
-            if(!isInOutputNodes(outputNodes, parentName)){
+            if(!isInOutputNodes(outputNodes, parentName) && parentName != null){
                 outputNodes.add(inputNodes.get(getNodeIndex(inputNodes, parentName)));
             }
 
@@ -239,7 +239,6 @@ public class MakeTree {
         inputLinks.add(new Link("G","E"));
         inputLinks.add(new Link("G","F"));
 
-        HashMap<String, ArrayList<String>> multCopies = new HashMap<String, ArrayList<String>>();
         //ArrayList<String> tempMultCopiesValue = new ArrayList<String>();
         //tempMultCopiesValue.add("A1");
         //tempMultCopiesValue.add("A2");
@@ -250,5 +249,9 @@ public class MakeTree {
         //System.out.println(getNextName(multCopies, "A"));
         //System.out.println(isInOutputNodes(inputNodes,"e"));
         //System.out.println(isInMultCopies(multCopies,"E"));
+
+        MakeTree myTree = new MakeTree(inputNodes,inputLinks);
+        System.out.println(myTree.getOutputNodes());
+        System.out.println(myTree.getOutputLinks());
     }
 }
