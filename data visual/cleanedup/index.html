@@ -1,0 +1,40 @@
+<html>
+<head>
+    
+    <link rel="stylesheet" type="text/css" href="style.css">
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="inputData.js"></script>
+    <script type="text/javascript" src="inputStudent.js"></script>
+    <script type="text/javascript" src="treemapCode.js"></script>
+    <script>
+        google.charts.load('current', {packages:["gauge","orgchart","treemap"]});
+        //var arr = prereqForTreemap(oneStudent);
+        //drawTreeMap(arr);
+        execute("domain","treemap",oneStudent);
+    </script>
+    
+    
+</head>
+<body>
+    <div id="header">
+        <h1>Student Progress Review</h1>
+    </div>
+    
+    <div id = "menu">    
+        </div>
+
+    <div id="section">
+    <div id="title"></div>
+    <div id="filter_div"></div>
+    <div id="chart_div" ></div><!--style="width: 900px; height: 500px;"-->
+    
+    <div id="gauge_title"><h3></h3></div>
+    <div id="gauge_div" style="text-align: center;"></div>
+    </div>
+    
+    <div id="footer">
+        Created for student and professor use.
+    </div>
+</body>
+</html>
