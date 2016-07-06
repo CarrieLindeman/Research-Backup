@@ -1,3 +1,4 @@
+
 /**
  * Created by carriellindeman on 6/23/2016.
  */
@@ -6,6 +7,9 @@ public class Node {
     String name;
     double value;
     double prevalue;
+    NodeColor color;
+    double range;
+
 
     public Node(String nameIn, double valueIn) {
         name = nameIn;
@@ -21,9 +25,19 @@ public class Node {
         return this.value;
     }
 
+    public double getPreValue() { return this.prevalue; }
+
+    public NodeColor getColor() { return this.color; }
+
+    public void setColor(int r, int g, int b){
+        this.color = new NodeColor(r,g,b);
+    }
+
     public void setNode(Node inputNode){
         this.name = inputNode.getName();
         this.value = inputNode.getValue();
+        this.prevalue = inputNode.getPreValue();
+        this.color = inputNode.getColor();
     }
 
     public void changeName(String nameIn){

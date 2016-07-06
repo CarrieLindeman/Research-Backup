@@ -8,6 +8,8 @@ public class Tree {
 
     ArrayList<Node> outputNodes = new ArrayList<Node>();
     ArrayList<Link> outputLinks = new ArrayList<Link>();
+    double max;
+    double min;
     HashMap<Node, ArrayList<Node>> multCopies = new HashMap<Node, ArrayList<Node>>();
 
     public Tree(ArrayList<Node> inputNodes, ArrayList<Link> inputLinks) {
@@ -17,6 +19,14 @@ public class Tree {
     public ArrayList<Node> getOutputNodes() { return outputNodes; }
 
     public ArrayList<Link> getOutputLinks() { return outputLinks; }
+
+    public double getMax(){
+        return this.max;
+    }
+
+    public double getMin(){
+        return this.min;
+    }
 
     /***
      * takes the previous node name and creates the next node name
@@ -147,6 +157,27 @@ public class Tree {
         }
     }
 
+    public void calcMax(){
+        double tempMax = 0;
+        for (int i = 0; i < this.outputNodes.size(); i++) {
+            if(this.outputNodes.get(i).getValue() >= tempMax){
+                tempMax = this.outputNodes.get(i).getValue();
+            }
+        }
+        this.max = tempMax;
+    }
+
+    public void calcMin(){
+        double tempMin = 10000;
+        for (int i = 0; i < this.outputNodes.size(); i++) {
+            if(this.outputNodes.get(i).getValue() <= tempMin){
+                tempMin = this.outputNodes.get(i).getValue();
+            }
+        }
+        this.min = tempMin;
+
+    }
+
     public void run(ArrayList<Node> inputNodes, ArrayList<Link> inputLinks){
         //iterates through every input link
         for (int i = 0; i < inputLinks.size(); i++) {
@@ -157,7 +188,7 @@ public class Tree {
             if(isInOutputNodes(child)){
                 Node newChild = makeNewNode(child);
                 this.outputNodes.add(newChild);
-                replacement.setNode(newChild);
+                replacement = newChild;
                 addToMultCopies(child,newChild);
             }
 
@@ -182,37 +213,44 @@ public class Tree {
                     addToMultCopies(child,newChild);
                 }//end for
             }//end if
+
         }//end for
+        calcMax();
+        calcMin();
     }
 
 
     public static void main(String[] args) {
      /*ArrayList<Node> inputNodes = new ArrayList<Node>();
         inputNodes.add(new Node("A",10));
-        inputNodes.add(new Node("B",50));
-        inputNodes.add(new Node("C",80));
+        inputNodes.add(new Node("B",500));
+        inputNodes.add(new Node("C",800));
         inputNodes.add(new Node("D",73));
-        inputNodes.add(new Node("E",22));
+        inputNodes.add(new Node("E",202));
+        //inputNodes.add(new Node(null,0));
 
      ArrayList<Link> inputLinks = new ArrayList<Link>();
+        //inputLinks.add(new Link(inputNodes.get(0),inputNodes.get(5)));
         inputLinks.add(new Link(inputNodes.get(1),inputNodes.get(0)));
         inputLinks.add(new Link(inputNodes.get(2),inputNodes.get(0)));
         inputLinks.add(new Link(inputNodes.get(3),inputNodes.get(1)));
         inputLinks.add(new Link(inputNodes.get(3),inputNodes.get(2)));
         inputLinks.add(new Link(inputNodes.get(4),inputNodes.get(3)));
-        */
+       */
 
 
         ArrayList<Node> inputNodes = new ArrayList<Node>();
-        inputNodes.add(new Node("A",1));//0
+        inputNodes.add(new Node("A",10));//0
         inputNodes.add(new Node("B",5));//1
-        inputNodes.add(new Node("C",7));//2
-        inputNodes.add(new Node("D",9));//3
-        inputNodes.add(new Node("E",11));//4
-        inputNodes.add(new Node("F",13));//5
-        inputNodes.add(new Node("G",15));//6
+        inputNodes.add(new Node("C",70));//2
+        inputNodes.add(new Node("D",23));//3
+        inputNodes.add(new Node("E",110));//4
+        inputNodes.add(new Node("F",31));//5
+        inputNodes.add(new Node("G",55));//6
+        inputNodes.add(new Node(null,0));
 
         ArrayList<Link> inputLinks = new ArrayList<Link>();
+        inputLinks.add(new Link(inputNodes.get(0),inputNodes.get(7)));
         inputLinks.add(new Link(inputNodes.get(1),inputNodes.get(0)));//A -> B
         inputLinks.add(new Link(inputNodes.get(2),inputNodes.get(0)));//A -> C
         inputLinks.add(new Link(inputNodes.get(3),inputNodes.get(1)));//B -> D
@@ -225,9 +263,20 @@ public class Tree {
         inputLinks.add(new Link(inputNodes.get(6),inputNodes.get(4)));//E -> G
         inputLinks.add(new Link(inputNodes.get(6),inputNodes.get(5)));//F -> G
 
+
+
         Tree myTree = new Tree(inputNodes, inputLinks);
-        System.out.println(myTree.getOutputNodes());
-        System.out.println(myTree.getOutputLinks());
+        //System.out.println(myTree.getOutputNodes());
+        //System.out.println(myTree.getOutputLinks());
+
+        FormatTree fullTree = new FormatTree(myTree);
+
+        fullTree.writeStuff(fullTree.formatLinks("linkList"));
+
+        System.out.println(myTree.outputNodes.get(2).getColor());
+        System.out.println(myTree.outputLinks.get(1).getChild().getName() + " " + myTree.outputLinks.get(1).getChild().getColor());
+        System.out.println(fullTree.fullTree.getOutputNodes().get(2).getColor());
+        System.out.println(fullTree.fullTree.getOutputLinks().get(1).getChild().getName() + " " + fullTree.fullTree.getOutputLinks().get(1).getChild().getColor());
     }
 
 }

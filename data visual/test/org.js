@@ -1,25 +1,34 @@
-
-var drawInput = [];
-
-var colors = [];
-
-for(var i = 0; i < linkList.length; i++){
-    var tempArray = [];
-    tempArray.push(linkList[i].child);
-    tempArray.push(linkList[i].parent);
-    tempArray.push(linkList[i].value);
-    colors.push(linkList[i].color);
-    drawInput.push(tempArray);
+function makeDivs(box){
+    var inputDivs = "";
+    for(var i = 0; i < box.divs.length; i++){
+        inputDivs += "<div id='" + box.divs[i] + "'></div>"
+    }
+    document.getElementById("section").innerHTML = inputDivs;
 }
 
-console.log(drawInput);
-console.log(colors);
 
-var options;
-      google.charts.load('current', {packages:["gauge","orgchart"]});
-      google.charts.setOnLoadCallback(drawChart);
+function drawOrgChart(box){
+    
+    document.getElementById(box.divs[0]).innerHTML = "<h2>" + box.student.name + "</h2>";
 
-      function drawChart() {
+    var drawInput = [];
+
+    var colors = [];
+
+    for(var i = 0; i < box.student.data.length; i++){
+        var tempArray = [];
+        tempArray.push(box.student.data[i].child);
+        tempArray.push(box.student.data[i].parent);
+        tempArray.push(box.student.data[i].value);
+        colors.push(box.student.data[i].color);
+        drawInput.push(tempArray);
+    }
+    
+    var options;
+    google.charts.load('current', {packages:["orgchart"]});
+    google.charts.setOnLoadCallback(drawChart);
+    
+    function drawChart() {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Topic');
         data.addColumn('string', 'Parent');
@@ -28,18 +37,17 @@ var options;
         data.addRows(drawInput);
 
         // Create the chart.
-        var chart = new google.visualization.OrgChart(document.getElementById('chart_div'));
+        var chart = new google.visualization.OrgChart(document.getElementById(box.divs[1]));
           
           for(var i = 0; i < linkList.length; i++){
             data.setRowProperty(i, 'style', 'border: 10px solid '+colors[i]+'');  
             
           }
-          
-        // Draw the chart, setting the allowHtml option to true for the tooltips.
+        
         chart.draw(data, {allowHtml:true,ready:true,selectionColor:'#666666'});
         google.visualization.events.addListener(chart, 'select', selectHandler);
         
-          function selectHandler(e) {
+        function selectHandler(e) {
               var selection = chart.getSelection();
               for (var i = 0; i < selection.length; i++) {
                 var item = selection[i];
@@ -54,8 +62,12 @@ var options;
                   var score = data.getFormattedValue(item.row, 2);
                 }
               }
-                document.getElementById("text").innerHTML = "Topic: " + topic + " Score: " + score;
+                document.getElementById(box.divs[2]).innerHTML = "Topic: " + topic + " Score: " + score;
           }
+    }
+    
+}
 
-          
-      }
+makeDivs(box1);
+drawOrgChart(box1);
+
