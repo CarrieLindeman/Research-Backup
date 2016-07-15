@@ -1,0 +1,129 @@
+{
+	"nodes": [{
+		"level": 0,
+		"id": "A",
+		"concept": {
+			"conceptTitle": "A",
+			"summaryInfo": {
+				"users": [],
+				"time": 0,
+				"unansweredObjectIds": [],
+				"numAssessable": 0,
+				"numCorrect": 0,
+				"numSummaries": 0,
+				"totalFalseEntries": 0,
+				"objectIds": []
+			}
+		},
+		"actualComp": 0.0,
+		"predictedComp": 0.0,
+		"numParents": 0,
+		"summaryInfo": {
+			"users": [],
+			"time": 0,
+			"unansweredObjectIds": [],
+			"numAssessable": 0,
+			"numCorrect": 0,
+			"numSummaries": 0,
+			"totalFalseEntries": 0,
+			"objectIds": []
+		}
+	}, {
+		"level": 0,
+		"id": "B",
+		"concept": {
+			"conceptTitle": "B",
+			"summaryInfo": {
+				"users": [],
+				"time": 0,
+				"unansweredObjectIds": [],
+				"numAssessable": 0,
+				"numCorrect": 0,
+				"numSummaries": 0,
+				"totalFalseEntries": 0,
+				"objectIds": []
+			}
+		},
+		"actualComp": 0.0,
+		"predictedComp": 0.0,
+		"numParents": 0,
+		"summaryInfo": {
+			"users": [],
+			"time": 0,
+			"unansweredObjectIds": [],
+			"numAssessable": 0,
+			"numCorrect": 0,
+			"numSummaries": 0,
+			"totalFalseEntries": 0,
+			"objectIds": []
+		}
+	}, {
+		"level": 0,
+		"id": "C",
+		"concept": {
+			"conceptTitle": "C",
+			"summaryInfo": {
+				"users": [],
+				"time": 0,
+				"unansweredObjectIds": [],
+				"numAssessable": 0,
+				"numCorrect": 0,
+				"numSummaries": 0,
+				"totalFalseEntries": 0,
+				"objectIds": []
+			}
+		},
+		"actualComp": 0.0,
+		"predictedComp": 0.0,
+		"numParents": 0,
+		"summaryInfo": {
+			"users": [],
+			"time": 0,
+			"unansweredObjectIds": [],
+			"numAssessable": 0,
+			"numCorrect": 0,
+			"numSummaries": 0,
+			"totalFalseEntries": 0,
+			"objectIds": []
+		}
+	}, {
+		"level": 0,
+		"id": "D",
+		"concept": {
+			"conceptTitle": "D",
+			"summaryInfo": {
+				"users": [],
+				"time": 0,
+				"unansweredObjectIds": [],
+				"numAssessable": 0,
+				"numCorrect": 0,
+				"numSummaries": 0,
+				"totalFalseEntries": 0,
+				"objectIds": []
+			}
+		},
+		"actualComp": 0.0,
+		"predictedComp": 0.0,
+		"numParents": 0,
+		"summaryInfo": {
+			"users": [],
+			"time": 0,
+			"unansweredObjectIds": [],
+			"numAssessable": 0,
+			"numCorrect": 0,
+			"numSummaries": 0,
+			"totalFalseEntries": 0,
+			"objectIds": []
+		}
+	}],
+	"links": [{
+		"parent": "A",
+		"child": "B"
+	}, {
+		"parent": "A",
+		"child": "C"
+	}, {
+		"parent": "C",
+		"child": "D"
+	}]
+}
