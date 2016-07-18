@@ -4,6 +4,7 @@ var visualizationList = [];
  var request = new XMLHttpRequest();
    request.open("GET", "input.json", false);
    request.send(null)
+   
 var dataObject = JSON.parse(request.responseText);
 
 console.log(dataObject);
