@@ -30,7 +30,7 @@ function makeColorsList(dataList){
     var max = findMax(dataList);
     var min = findMin(dataList);
     
-    var maxColor = new NodeColor(0,255,0);
+    var maxColor = new NodeColor(0,0,255);
     var minColor = new NodeColor(255,0,0);
     
     for(var i = 0; i < dataList.length; i++){
@@ -40,7 +40,7 @@ function makeColorsList(dataList){
         var b = getNewColorValue(maxColor.blue, minColor.blue, scorePer);
         
         var currNodeColor = new NodeColor(r,g,b);
-        colorsList.push(rgbToHex(currNodeColor));
+        colorsList.push("#"+RGBToHex(currNodeColor));
     }
     
     return colorsList;
@@ -67,13 +67,11 @@ function getNewColorValue(maxC, minC, scorePer){
     return newC;
 }
 
-function componentToHex(c) {
-    var hex = c.toString(16);
-    return hex.length == 1 ? "0" + hex : hex;
-}
-
-function rgbToHex(inputColor) {
-    return "#" + componentToHex(inputColor.red) + componentToHex(inputColor.green) + componentToHex(inputColor.blue);
+function RGBToHex(colorIn){
+    var bin = colorIn.red << 16 | colorIn.green << 8 | colorIn.blue;
+    return (function(h){
+        return new Array(7-h.length).join("0")+h
+    })(bin.toString(16).toUpperCase())
 }
 
 function calcScorePerc(max, min, score){
@@ -86,6 +84,9 @@ google.charts.load('current', {packages:["orgchart"]});
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
+          
+        var colorList = makeColorsList(dataInput);
+          
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Topic');
         data.addColumn('string', 'Parent');
@@ -96,17 +97,40 @@ google.charts.load('current', {packages:["orgchart"]});
 
         // Create the chart.
         var chart = new google.visualization.OrgChart(document.getElementById('section'));
+          
+          
+          for(var i = 0; i < dataInput.length; i++){
+            data.setRowProperty(i, 'style', 'border: 10px solid '+colorList[i]+'');  
+            
+          }
         // Draw the chart, setting the allowHtml option to true for the tooltips.
         chart.draw(data, {allowHtml:true});
+          
+          google.visualization.events.addListener(chart, 'select', selectHandler);
+        
+        function selectHandler(e) {
+              var selection = chart.getSelection();
+              for (var i = 0; i < selection.length; i++) {
+                var item = selection[i];
+                if (item.row != null && item.column != null) {
+                  var topic = data.getFormattedValue(item.row, item.column);
+                  var score = data.getFormattedValue(item.row, 2);
+                } else if (item.row != null) {
+                  var topic = data.getFormattedValue(item.row, 0);
+                  var score = data.getFormattedValue(item.row, 2);
+                } else if (item.column != null) {
+                  var topic = data.getFormattedValue(0, item.column);
+                  var score = data.getFormattedValue(item.row, 2);
+                }
+              }
+            if(topic != null && score != null){
+                document.getElementById("text").innerHTML = "Topic: " + topic + " Score: " + score;
+            }else{
+                document.getElementById("text").innerHTML = "Select a topic to see the overall score";
+            }
+          }
       }
 }
 
-Number.prototype.toFixedDown = function(digits) {
-    var re = new RegExp("(\\d+\\.\\d{" + digits + "})(\\d)"),
-        m = this.toString().match(re);
-    return m ? parseFloat(m[1]) : this.valueOf();
-};
 
-var colorList = makeColorsList(visualizationList);
-console.log(colorList);
 drawOrgChart(visualizationList);

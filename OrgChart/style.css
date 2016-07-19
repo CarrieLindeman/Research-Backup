@@ -34,9 +34,11 @@ body {
     float:left;
     padding:10px; 
 }
-#gauge_div {
-    padding-left: 36%;
-    padding-right: auto;
+#text {
+    text-align: center;
+    width:900px;
+    float:left;
+    padding:10px; 
 }
 #footer {
     background-color:black;
