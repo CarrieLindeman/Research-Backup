@@ -91,20 +91,19 @@ google.charts.load('current', {packages:["orgchart"]});
         data.addColumn('string', 'Topic');
         data.addColumn('string', 'Parent');
         data.addColumn('number', 'Score');
-
+          
         // For each orgchart box, provide the name, manager, and tooltip to show.
         data.addRows(dataInput);
-
+          
         // Create the chart.
         var chart = new google.visualization.OrgChart(document.getElementById('section'));
-          
           
           for(var i = 0; i < dataInput.length; i++){
             data.setRowProperty(i, 'style', 'border: 10px solid '+colorList[i]+'');  
             
           }
         // Draw the chart, setting the allowHtml option to true for the tooltips.
-        chart.draw(data, {allowHtml:true});
+         chart.draw(data, {allowHtml:true,ready:true,selectionColor:'#999999'});
           
           google.visualization.events.addListener(chart, 'select', selectHandler);
         
