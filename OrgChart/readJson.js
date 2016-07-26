@@ -2,7 +2,7 @@ var dataObject;
 var visualizationList = [];
 
  var request = new XMLHttpRequest();
-   request.open("GET", "domain.json", false);
+   request.open("GET", "input.json", false);
    request.send(null)
    
 var dataObject = JSON.parse(request.responseText);
@@ -31,17 +31,21 @@ for(var i = 0; i < dataObject.links.length; i++){
 function findRoot(dataList){
     var roots = [];
     for(var i = 0; i < dataList.nodes.length; i++){
-        roots.push(dataList.nodes[i]);
+        roots.push(dataList.nodes[i].id);
     }
     
     for(var i = 0; i < dataList.links.length; i++){
         for(var j = 0; j < dataList.nodes.length; j++){
             if(dataObject.links[i].child == dataList.nodes[j].id){
+                if(dataList.nodes[j].id == "Structure1"){
+                    console.log("strut");
+                }
                 var index = roots.indexOf(dataList.nodes[j].id);
+                console.log(index);
                 roots.splice(index, 1);
             }
         }
     }
-    
+    console.log(roots);
     return roots;
 }
